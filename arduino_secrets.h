@@ -2,13 +2,13 @@
 #define SECRET_PASS ""
 #define SECRET_IP ""
 #define SECRET_PORT ""
-#define SECRET_ENDPOINT ""
+#define SECRET_ENDPOINT "" //ex: /receive-data
 
 #define SECRET_DHT ""
 #define SECRET_GAS ""
 #define SECRET_PULSE ""
 
-const char NESTJS_ENDPOINT[] = "/receive-data"; 
+const char NESTJS_ENDPOINT[] = ""; 
 
 const int DHT_DATA_PIN = 2;
 const int DHT_TYPE = DHT11;
