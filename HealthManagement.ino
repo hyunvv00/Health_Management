@@ -14,13 +14,7 @@
 #define GAS_SENSOR_PIN SECRET_GAS
 #define PULSE_SENSOR_PIN SECRET_PULSE
 
-const char NESTJS_ENDPOINT[] = "/receive-data"; 
-
-const int DHT_DATA_PIN = 2;
 const int DHT_TYPE = DHT11;
-
-const int GAS_SENSOR_PIN = A0;
-const int PULSE_SENSOR_PIN = A1;
 
 WiFiClient wifi;
 HttpClient client = HttpClient(wifi, NESTJS_SERVER_IP, NESTJS_SERVER_PORT);
