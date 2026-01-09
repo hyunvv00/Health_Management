@@ -9,11 +9,15 @@
 #define WIFI_PASSWORD SECRET_PASS
 #define NESTJS_SERVER_IP SECRET_IP 
 #define NESTJS_SERVER_PORT SECRET_PORT
+#define NESTJS_ENDPOINT[] SECRET_ENDPOINT
 
 const char NESTJS_ENDPOINT[] = "/receive-data"; 
+
 const int DHT_DATA_PIN = 2;
-const int GAS_SENSOR_PIN = A0;
 const int DHT_TYPE = DHT11;
+
+const int GAS_SENSOR_PIN = A0;
+const int PULSE_SENSOR_PIN = A1;
 
 WiFiClient wifi;
 HttpClient client = HttpClient(wifi, NESTJS_SERVER_IP, NESTJS_SERVER_PORT);
@@ -64,8 +68,6 @@ String intensityMessage = "DATA INIT";
 float filtered = 0.0f;
 
 const int   ADC_MAX        = 4095;
-const int   PULSE_SENSOR_PIN = A1;
-
 const float FS             = 100.0f; 
 const float DT             = 1.0f / FS; 
 const float FC_HP          = 0.7f; 
