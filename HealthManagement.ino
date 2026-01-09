@@ -347,11 +347,11 @@ void loop() {
     updateHistory();
     assessRiskAndSetIntensity();
 
-    Serial.print("EKF DATA: T="); Serial.print(filteredT, 2); 
-    Serial.print("C, H="); Serial.print(filteredH, 2); 
-    Serial.print("%, G(PPM)="); Serial.print(filteredG, 0);
-    Serial.print(" | HI="); Serial.print(filteredHI, 2); 
-    Serial.print(" | INTENSITY="); Serial.println(intensityMessage);
+    // Serial.print("EKF DATA: T="); Serial.print(filteredT, 2); 
+    // Serial.print("C, H="); Serial.print(filteredH, 2); 
+    // Serial.print("%, G(PPM)="); Serial.print(filteredG, 0);
+    // Serial.print(" | HI="); Serial.print(filteredHI, 2); 
+    // Serial.print(" | INTENSITY="); Serial.println(intensityMessage);
     
     static unsigned long lastSendTime = 0;
     if (millis() - lastSendTime >= 1000) {
