@@ -8,12 +8,9 @@
 #define WIFI_SSID SECRET_SSID
 #define WIFI_PASSWORD SECRET_PASS
 #define NESTJS_SERVER_IP SECRET_IP 
-#define NESTJS_SERVER_PORT
-#define NESTJS_ENDPOINT[]
+#define NESTJS_SERVER_PORT SECRET_PORT
 
-const int NESTJS_SERVER_PORT = 3000;
 const char NESTJS_ENDPOINT[] = "/receive-data"; 
-
 const int DHT_DATA_PIN = 2;
 const int GAS_SENSOR_PIN = A0;
 const int DHT_TYPE = DHT11;
