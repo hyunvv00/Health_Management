@@ -1,4 +1,4 @@
-#define SECRET_SSID "12345678"
-#define SECRET_PASS "12345678!@#"
-#define SECRET_IP "192.168.60.155"
-#define SECRET_PORT "3000"
+#define SECRET_SSID ""
+#define SECRET_PASS ""
+#define SECRET_IP ""
+#define SECRET_PORT ""
