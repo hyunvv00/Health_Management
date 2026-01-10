@@ -10,7 +10,7 @@
 - MCU 보드(Arduino UNO R4) 
 - 온·습도 센서(DHT 11)
 - 공기질 센서(MQ 135)
-- 식박동 센서(SZH SSBH 035)
+- 심박동 센서(SZH SSBH 035)
 - Red LED
 - Yollow LED
 - 9V 배터리
