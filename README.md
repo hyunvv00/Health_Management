@@ -7,12 +7,12 @@
 
 ## 하드웨어 구성
 이 시스템은 Arduino 기반에서 센서 신호를 직접 수집·처리하고, 위험 판정 결과를 LED로 즉시 피드백하며, 동시에 Wi‑Fi로 서버에 데이터를 전송하는 구조로 설계되었습니다.
-- Arduino UNO R4  
-- DHT 11
-- MQ 135
-- SZH SSBH 035
-- LED(Red)
-- LED(Yollow)  
+- MCU 보드(Arduino UNO R4) 
+- 온·습도 센서(DHT 11)
+- 공기질 센서(MQ 135)
+- 식박동 센서(SZH SSBH 035)
+- Red LED
+- Yollow LED
 - 9V 배터리
 
 ---
@@ -49,7 +49,7 @@ LTSD가 “historical SD의 EMA”로 정의되고, 이를 이용해 Adaptive SD
 
 ---
 
-## 출력(의사결정)과 효과
+## 출력 신호와 효과
 
 센서 분석 결과를 사용자 행동으로 연결하기 위해, 결과를 OPTIMAL / MANAGE HEAT / MANAGE BREATH / TAKE A BREAK 형태의 명확한 메시지로 제공합니다.  
 
