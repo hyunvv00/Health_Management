@@ -1,5 +1,5 @@
 # Health Management
-운동/활동 중 열 환경(온도·습도), 공기질(가스 농도 PPM), 심박 신호를 동시에 수집하고, 센서 노이즈를 억제한 뒤 위험도를 상황별로 판단하여 “휴식/열 관리/호흡 관리/정상”을 안내하는 실시간 헬스 모니터링 시스템입니다.  
+운동/활동 중 열 환경(온도·습도), 공기질(가스 농도 PPM), 심박 신호를 동시에 수집하고, 센서 노이즈를 억제한 뒤 위험도를 상황별로 판단하여 “OPTIMAL / MANAGE HEAT / MANAGE BREATH / TAKE A BREAK”을 안내하는 실시간 헬스 모니터링 시스템입니다.  
 
 단순 임계값 경보가 아니라, 센서 파싱 → EKF 기반 상태추정 → 3-Way Heuristics(Trend/Pattern/Spike) → Adaptive Threshold로 이어지는 “알고리즘 중심 파이프라인”을 설계한 것이 핵심입니다.
 
@@ -53,7 +53,7 @@ LTSD가 “historical SD의 EMA”로 정의되고, 이를 이용해 Adaptive SD
 
 ## 출력 신호와 효과
 
-센서 분석 결과를 사용자 행동으로 연결하기 위해, 결과를 OPTIMAL / MANAGE HEAT / MANAGE BREATH / TAKE A BREAK 형태의 명확한 메시지로 제공합니다.  
+센서 분석 결과를 사용자 행동으로 연결하기 위해, 결과를 OPTIMAL / MANAGE HEAT / MANAGE BREATH / TAKE A BREAK 형태의 명확한 메시지로 제공하고 위험 판정 결과를 LED로 즉시 피드백을 줍니다.  
 
 서버 측에서도 수신 데이터(온도·습도·가스·Heat Index·예측값·Intensity)를 로깅하는 흐름이 제시되어, “엣지에서 판단한 결과”를 서비스/대시보드로 확장할 수 있는 형태를 갖추고 있습니다.
 
