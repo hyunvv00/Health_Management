@@ -1,4 +1,4 @@
-# Health Management
+# Health Management – Arduino Part
 <div align="center">
 
 https://github.com/user-attachments/assets/7554c359-8b9a-4565-ab32-fe14fdc237a5
@@ -108,3 +108,5 @@ LTSD가 “historical SD의 EMA”로 정의되고, 이를 이용해 Adaptive SD
 | `DCOFFSET` | DC 오프셋 보정 | 기준선 이동 | 기준선 이동 | ADC 중심값이 다를 때 조정 |
 | `PLOTMAX` | (표시용) 클램핑 상한 | 그래프 포화↑ | 포화↓ | 시각화가 잘리면 조정 |
 </div>
+
+---
