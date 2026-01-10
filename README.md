@@ -1,24 +1,11 @@
 # Health Management
+
+https://github.com/user-attachments/assets/7554c359-8b9a-4565-ab32-fe14fdc237a5
+
 운동/활동 중 열 환경(온도·습도), 공기질(가스 농도 PPM), 심박 신호를 동시에 수집하고, 센서 노이즈를 억제한 뒤 위험도를 상황별로 판단하여 “OPTIMAL / MANAGE HEAT / MANAGE BREATH / TAKE A BREAK”을 안내하는 실시간 헬스 모니터링 시스템입니다.  
 단순 임계값 경보가 아니라, 센서 파싱 → EKF 기반 상태추정 → 3-Way Heuristics(Trend/Pattern/Spike) → Adaptive Threshold로 이어지는 “알고리즘 중심 파이프라인”을 설계한 것이 핵심입니다.
 
-> 이 레포지토리는 헬스 관리 시스템의 Arduino 내부 펌웨어 코드만을 포함하며, 서버·모바일 앱·클라우드 코드는 제공하지 않습니다.
-
----
-
-## 모바일 UI Demo
-
-<div align="center">
-<video width="320" height="568" controls loop muted poster="thumbnail.jpg">
-  <source src="https://github.com/user-attachments/assets/05cbd679-fb32-499c-9251-bbf95ff57147" type="video/mp4">
-</video>
-<video width="320" height="568" controls loop muted poster="thumbnail.jpg" style="margin-left: 40px;">
-  <source src="https://github.com/user-attachments/assets/b373aedc-cb88-4aa0-9776-cfde43e4447c" type="video/mp4">
-</video>
-</div>
-
-https://github.com/user-attachments/assets/05cbd679-fb32-499c-9251-bbf95ff57147  |
-https://github.com/user-attachments/assets/b373aedc-cb88-4aa0-9776-cfde43e4447c
+> 본 레포지토리는 헬스 관리 시스템의 Arduino 내부 펌웨어 코드만을 포함하며, 서버·모바일 앱·클라우드 코드는 제공하지 않습니다.
 
 ---
 
