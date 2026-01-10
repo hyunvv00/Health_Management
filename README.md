@@ -1,6 +1,6 @@
 # Health Management
 
-<video width="50%" src="https://github.com/user-attachments/assets/7554c359-8b9a-4565-ab32-fe14fdc237a5"></video>
+https://github.com/user-attachments/assets/7554c359-8b9a-4565-ab32-fe14fdc237a5
 
 운동/활동 중 열 환경(온도·습도), 공기질(가스 농도 PPM), 심박 신호를 동시에 수집하고, 센서 노이즈를 억제한 뒤 위험도를 상황별로 판단하여 “OPTIMAL / MANAGE HEAT / MANAGE BREATH / TAKE A BREAK”을 안내하는 실시간 헬스 모니터링 시스템입니다.  
 단순 임계값 경보가 아니라, 센서 파싱 → EKF 기반 상태추정 → 3-Way Heuristics(Trend/Pattern/Spike) → Adaptive Threshold로 이어지는 “알고리즘 중심 파이프라인”을 설계한 것이 핵심입니다.
