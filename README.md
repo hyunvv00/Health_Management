@@ -2,6 +2,24 @@
 운동/활동 중 열 환경(온도·습도), 공기질(가스 농도 PPM), 심박 신호를 동시에 수집하고, 센서 노이즈를 억제한 뒤 위험도를 상황별로 판단하여 “OPTIMAL / MANAGE HEAT / MANAGE BREATH / TAKE A BREAK”을 안내하는 실시간 헬스 모니터링 시스템입니다.  
 단순 임계값 경보가 아니라, 센서 파싱 → EKF 기반 상태추정 → 3-Way Heuristics(Trend/Pattern/Spike) → Adaptive Threshold로 이어지는 “알고리즘 중심 파이프라인”을 설계한 것이 핵심입니다.
 
+> 이 레포지토리는 헬스 관리 시스템의 Arduino 내부 펌웨어 코드만을 포함하며, 서버·모바일 앱·클라우드 코드는 제공하지 않습니다.
+
+---
+
+## 모바일 UI Demo
+
+<div align="center">
+<video width="320" height="568" controls loop muted poster="thumbnail.jpg">
+  <source src="https://github.com/user-attachments/assets/05cbd679-fb32-499c-9251-bbf95ff57147" type="video/mp4">
+</video>
+<video width="320" height="568" controls loop muted poster="thumbnail.jpg" style="margin-left: 40px;">
+  <source src="https://github.com/user-attachments/assets/b373aedc-cb88-4aa0-9776-cfde43e4447c" type="video/mp4">
+</video>
+</div>
+
+https://github.com/user-attachments/assets/05cbd679-fb32-499c-9251-bbf95ff57147  |
+https://github.com/user-attachments/assets/b373aedc-cb88-4aa0-9776-cfde43e4447c
+
 ---
 
 ## 하드웨어 구성
@@ -16,38 +34,39 @@
 
 ---
 
-## 입력 신호
+## 입력
 - 온·습도 센서: 온도/습도를 기반으로 Heat Index(체감온도)를 산출하고 열 위험 평가에 사용합니다.  
 - 공기질 센서: 아날로그 신호를 가스 농도(PPM)로 정량화하여 호흡 위험 지표로 사용합니다.  
 - 심박동 센서: 아날로그 심박 파형을 필터링해 변동을 줄이고 안정적인 입력으로 사용합니다.
 
 ---
 
-## 핵심 기술 1: 센서 파싱(정량화)
+## 핵심 기술
+### Step 1: 센서 파싱(정량화)
 온·습도는 Heat Index Trend(체감온도 추세)로 표현되어 열 환경이 “좋아지는지/나빠지는지”를 연속적으로 해석할 수 있게 구성되어 있습니다. 
 공기질은 PPM 단위의 농도 추세로 관리되며, 열 지표와 함께 위험도를 분리해 판단할 수 있도록 설계되었습니다.
 
-## 핵심 기술 2: EKF 기반 센서 융합(노이즈 억제)
+### Step 2: EKF 기반 센서 융합(노이즈 억제)
 EKF(확장 칼만 필터)의 예측–갱신 구조를 통해, 측정치의 흔들림을 줄이고 “현재 상태(온도/습도/공기질)”를 안정적으로 추정하는 과정을 핵심 요소로 제시합니다. 
 이 설계의 효과는, 위험 판단이 순간적인 잡음에 휘둘리지 않고 상태 변화의 방향성과 크기를 기반으로 동작하도록 만듭니다.
 
-## 핵심 기술 3: 심박 신호 필터링(HPF + LPF)
+### Step 3: 심박 신호 필터링(HPF + LPF)
 심박 신호는 센서 특성상 저주파 드리프트(기준선 흔들림)와 고주파 잡음이 섞이기 쉬워 “그대로 쓰면” 상태 판정에 불리합니다.  
 심박 신호를 High-pass + Low-pass(대역통과 형태)로 처리합니다. 이는 느린 추세성 흔들림(DC/기준선 성분)을 줄이고, 너무 빠른 잡음을 억제해 심박 파형의 유효 대역을 남깁니다.
 
-## 핵심 기술 4: 3-Way Heuristics (시나리오 기반 위험 탐지)
+### Step 4: 3-Way Heuristics (시나리오 기반 위험 탐지)
 - Trend Risk(추세 위험): 일정 구간의 변화량을 보고 “점진적으로 악화되는 상황”을 탐지합니다.  
 - Pattern Risk(패턴 위험): 표준편차(SD) 기반으로 “평소 대비 변동성이 커진 이상 패턴”을 탐지합니다.  
 - Spike Risk(스파이크 위험): Raw와 추정값의 차이를 이용해 “순간 급변”을 위험 신호로 탐지합니다.
 
-## 핵심 기술 5: Adaptive Threshold (LTSD 기반 동적 임계값)
+### Step 5: Adaptive Threshold (LTSD 기반 동적 임계값)
 패턴 위험 탐지에서 중요한 부분은, SD를 고정 임계값으로 비교하지 않고 LTSD(Long-Term Standard Deviation)를 EMA로 갱신해 “평소 변동성”을 기준으로 임계값이 적응하도록 만듭니다.  
 LTSD가 “historical SD의 EMA”로 정의되고, 이를 이용해 Adaptive SD Threshold를 구성합니다.  
 이 방식은 환경 변화나 센서 품질 차이로 변동폭이 달라져도, 경보가 과도하게 울리지 않도록 안정적인 위험 탐지를 목표로 합니다.
 
 ---
 
-## 출력 신호와 효과
+## 출력
 
 센서 분석 결과를 사용자 행동으로 연결하기 위해, 결과를 OPTIMAL / MANAGE HEAT / MANAGE BREATH / TAKE A BREAK 형태의 명확한 메시지로 제공하고 위험 판정 결과를 LED로 즉시 피드백을 줍니다.  
 서버 측에서도 수신 데이터(온도·습도·가스·Heat Index·예측값·Intensity)를 로깅하는 흐름이 제시되어, “엣지에서 판단한 결과”를 서비스/대시보드로 확장할 수 있는 형태를 갖추고 있습니다.
@@ -58,6 +77,7 @@ LTSD가 “historical SD의 EMA”로 정의되고, 이를 이용해 Adaptive SD
 아래 파라미터들은 “무조건 정답 값”이 아니라, 오탐/미탐을 보면서 조정하는 설정값입니다.
 
 ### 위험 판정 임계값 (가장 중요)
+<div align="center">
 
 | 파라미터 | 의미 | 값이 커지면 | 값이 작아지면 | 언제 조정? |
 |---|---|---|---|---|
@@ -65,8 +85,10 @@ LTSD가 “historical SD의 EMA”로 정의되고, 이를 이용해 Adaptive SD
 | `GMAXINCREASEDELTA` | 공기질(PPM) 변화량 기반 Trend Risk 임계값 | 공기질 악화 경보가 늦게 뜸 | 공기질 경보가 자주 뜸 | 실내 환기/센서 위치가 민감하면 ↑ |
 | `HIINNOVATIONTHRESHOLD` | Raw HI ↔ 필터 HI 차이 기반 Spike Risk 임계값 | 순간 튐을 덜 경고 | 순간 튐을 더 경고 | 센서가 흔들려서 스파이크가 잦으면 ↑ |
 | `GINNOVATIONTHRESHOLD` | Raw PPM ↔ 필터 PPM 차이 기반 Spike Risk 임계값 | 가스 스파이크를 덜 경고 | 가스 스파이크를 더 경고 | 공기질 센서 노이즈가 심하면 ↑ |
+</div>
 
 ### 패턴(변동성) 기반 임계값: Adaptive SD Threshold
+<div align="center">
 
 | 파라미터 | 의미 | 값이 커지면 | 값이 작아지면 | 튜닝 포인트 |
 |---|---|---|---|---|
@@ -74,15 +96,19 @@ LTSD가 “historical SD의 EMA”로 정의되고, 이를 이용해 Adaptive SD
 | `SDSMOOTHINGFACTOR` | LTSD(장기 SD) 업데이트의 EMA 비율 | 최근 변화에 빨리 적응 | 장기 평균에 더 고정 | 환경이 자주 바뀌면 ↑ |
 | `SDSAFETYMULTIPLIER` | LTSD에 곱하는 안전 계수(패턴 임계값 여유) | 패턴 경보가 줄어듦 | 패턴 경보가 늘어남 | 오탐이 많으면 ↑, 미탐이 많으면 ↓ |
 | `HISDTHRESHOLD`, `GSDTHRESHOLD` | 최종 SD 임계값(내부에서 갱신됨) | - | - | 보통 직접 고정 튜닝 대상이라기보다, 동작 확인용 지표에 가깝습니다. |
+</div>
 
 ### 센서 스케일/변환 관련 (환경 의존)
+<div align="center">
 
 | 파라미터 | 의미 | 값이 커지면 | 값이 작아지면 | 언제 조정? |
 |---|---|---|---|---|
 | `GASMAXPPM` | 공기질 변환 범위(ADC→PPM 스케일 상한) | 변환된 PPM 값이 커질 수 있음 | PPM 값이 작게 나옴 | 센서 종류/캘리브레이션 기준이 바뀌면 재설정 |
 | `ADCMAX` | ADC 해상도 기준값 | - | - | 보드/ADC 설정이 달라질 때만 점검 |
+</div>
 
 ### 심박 신호 필터/스케일 (움직임/착용 상태에 민감)
+<div align="center">
 
 | 파라미터 | 의미 | 값이 커지면 | 값이 작아지면 | 튜닝 포인트 |
 |---|---|---|---|---|
@@ -92,3 +118,4 @@ LTSD가 “historical SD의 EMA”로 정의되고, 이를 이용해 Adaptive SD
 | `SCALINGGAIN` | 심박 신호 스케일(증폭) | 출력 진폭↑ | 출력 진폭↓ | 센서 출력이 약하면 ↑ |
 | `DCOFFSET` | DC 오프셋 보정 | 기준선 이동 | 기준선 이동 | ADC 중심값이 다를 때 조정 |
 | `PLOTMAX` | (표시용) 클램핑 상한 | 그래프 포화↑ | 포화↓ | 시각화가 잘리면 조정 |
+</div>
