@@ -1,14 +1,27 @@
-포트폴리오형이 좋고 심작동센서에 사용된 필터도 언급했으면 좋을 것 같아 왜 그 필터를 사용했는지
-
-아래는 **포트폴리오형 README 문안**으로, 센서 모델명은 쓰지 않고(온습도/공기질/심박동 센서로만 표기), **코드/파라미터는 직접 노출하지 않으며**, 자료에 나온 기술과 효과를 중심으로 정리했습니다 [1][2][3].  
-심박동 센서에는 자료에 명시된 **HPF + LPF(대역통과 형태)** 필터를 “왜 썼는지”까지 포함했습니다 [3][2].
-
-***
-
 # Health Management (Sensor Fusion, Risk Reasoning)
 
 운동/활동 중 **열 환경(온도·습도)**, **공기질(가스 농도 PPM)**, **심박 신호**를 동시에 수집하고, **센서 노이즈를 억제한 뒤 위험도를 상황별로 판단**하여 “휴식/열 관리/호흡 관리/정상”을 안내하는 실시간 헬스 모니터링 시스템입니다 [1][3].  
 단순 임계값 경보가 아니라, **센서 파싱 → EKF 기반 상태추정 → 3-Way Heuristics(Trend/Pattern/Spike) → Adaptive Threshold**로 이어지는 “알고리즘 중심 파이프라인”을 설계한 것이 핵심입니다 [1][3].
+
+그리고 이제 하드웨어 구성 설명도 추가하며누좋을 것 같아 위치는 내가 복사 붙여넣기할께 하드웨어 구성 파트만 작성해줘
+
+## 하드웨어 구성
+
+이 시스템은 **Arduino 기반 엣지 디바이스**에서 센서 신호를 직접 수집·처리하고, 위험 판정 결과를 **LED로 즉시 피드백**하며, 동시에 **Wi‑Fi로 서버에 데이터를 전송**하는 구조로 설계되었습니다 [1][2].
+
+- **MCU 보드(Arduino UNO 계열)**: 센서 데이터 수집 및 EKF/위험 판정 로직을 수행하는 메인 컨트롤러입니다 [1][3].  
+- **온·습도 센서(2개 구성)**: 열 환경(온도·습도)을 측정하고 Heat Index/Trend 산출에 사용됩니다 [3][1].  
+- **공기질 센서(아날로그 입력)**: 가스 농도 추정에 필요한 신호를 입력받아 PPM 기반 공기질 지표를 구성합니다 [1][2].  
+- **심박동 센서(아날로그 입력)**: 심박 파형을 입력받아 필터링된 심박 신호로 활용합니다 [1][2].  
+- **LED 알림(2개)**: 위험 유형에 따라 표시되는 상태 출력 장치입니다(열 관리/호흡 관리 등 상태 구분) [3][2].  
+- **Wi‑Fi 통신 모듈(보드 내 Wi‑Fi 사용)**: 실시간 주기로 서버에 HTTP POST 방식으로 센서/판정 데이터를 전송합니다 [1][3].  
+- **전원 구성**: 배터리 기반 구동 구성이 포함되어 이동형(웨어러블/현장형) 프로토타입 형태로 제시됩니다 [3].  
+
+### 핀/인터페이스 개요(자료 기반)
+
+- **아날로그 입력**: 공기질 센서, 심박동 센서 신호 입력에 사용됩니다 [1][2].  
+- **디지털 출력**: LED 알림 출력에 사용됩니다 [1][2].  
+- **Wi‑Fi 네트워크 연결**: 보드에서 직접 네트워크에 접속하여 서버로 데이터를 전송합니다 [3][2].
 
 ## 입력 신호 (범용 센서 표기)
 
@@ -55,29 +68,3 @@
 시스템은 센서 분석 결과를 사용자 행동으로 연결하기 위해, 결과를 **OPTIMAL / MANAGE HEAT / MANAGE BREATH / TAKE A BREAK** 형태의 명확한 메시지로 제공합니다 [1][3].  
 또한 Heat Index Trend와 Gas Concentration(PPM)을 함께 보여주는 구성으로, 열 환경과 공기질 위험을 분리해서 이해할 수 있도록 설계되어 있습니다 [1].  
 서버 측에서도 수신 데이터(온도·습도·가스·Heat Index·예측값·Intensity)를 로깅하는 흐름이 제시되어, “엣지에서 판단한 결과”를 서비스/대시보드로 확장할 수 있는 형태를 갖추고 있습니다 [1][2].
-
-***
-
-원하면 마지막에 포트폴리오에서 강하게 먹히는 **“My Contribution(담당 업무)”** 섹션을 5~6줄로 더 붙여줄게요. (예: *센서 파싱 설계 / EKF 융합 구조 구현 / 3-Way 시나리오 판정 로직 설계 / LTSD 기반 적응형 임계값 도입 / 심박 신호 필터링 설계*)
-
-인용:
-[1] helseu_maenijimeonteu_siseutem.pptx.pdf https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/fdec0bfc-721d-4129-8ccc-8ba71eabc168/helseu_maenijimeonteu_siseutem.pptx.pdf
-[2] aduino_coejongbalpyo.pptx.pdf https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/9de2a5d9-7d3a-41f2-acf4-3e9039adefba/aduino_coejongbalpyo.pptx.pdf
-[3] HealthManagement.ino https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/41682a96-6e54-4f0a-99f9-efc041221970/HealthManagement.ino
-[4] SimpleWebServerWiFi.ino https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/82e46fe6-d56b-4566-9ba8-1d62195e37d5/SimpleWebServerWiFi.ino
-[5] train.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/c3886d44-5e06-4fbe-9d32-a254caaadac9/train.py
-[6] val.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/9ad764b6-cc06-4340-ba7b-36069bec536f/val.py
-[7] datasets.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/5015a7b5-746b-4f57-8c73-c36e65ea3c67/datasets.py
-[8] kobert_val.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/816b6018-789c-4770-a088-51f050ea34a6/kobert_val.py
-[9] kobert_execution.bash https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/5ade8d4a-b6c7-4d8f-bf4c-b55a3325117c/kobert_execution.bash
-[10] kobert_question.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/a7cc70cf-9a2e-4821-b612-1b8d54e08451/kobert_question.py
-[11] kobert_train.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/170a4adf-a244-4ff0-940d-8b5cc4771686/kobert_train.py
-[12] kobert_result.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/af4d7418-3ad3-4011-bdaf-06f33af961d1/kobert_result.py
-[13] kaebseuton-gyehoegseo.pdf https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/d01cc2f7-c6ca-4dbf-8f7d-1d126dba305e/kaebseuton-gyehoegseo.pdf
-[14] crack_val_risk.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/d74ec14c-7154-44cb-8ac2-e0bb33d05b15/crack_val_risk.py
-[15] crack_val_multi_analysis.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/5f446396-9b6a-4e28-91c6-136296799518/crack_val_multi_analysis.py
-[16] crack_val_analysis.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/a98c628f-d379-489c-af62-bf40c5776ab4/crack_val_analysis.py
-[17] crack_val_prediction.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/e93d634e-c1b0-4a3e-8ef7-210ce29105a0/crack_val_prediction.py
-[18] crack_val_video.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/4f398eb9-fe02-48fd-9592-3f578de7d236/crack_val_video.py
-[19] crack_val_angel.py https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/c4528964-48ab-4a81-8915-e1576b05b50c/crack_val_angel.py
-[20] keompyuteo_bijeon.pptx.pdf https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/71906464/46233b3b-5776-4147-bf72-d138887e810d/keompyuteo_bijeon.pptx.pdf
